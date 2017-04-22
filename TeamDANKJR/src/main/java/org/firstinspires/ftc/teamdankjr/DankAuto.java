@@ -58,15 +58,14 @@ public class DankAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor FL, FR, BR, BL;
+    DcMotor L, R;
 
     @Override
     public void runOpMode() {
-        FL = hardwareMap.dcMotor.get("FL");
-        FR = hardwareMap.dcMotor.get("FR");
-        BR = hardwareMap.dcMotor.get("BR");
-        BL = hardwareMap.dcMotor.get("BL");
-        FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        L = hardwareMap.dcMotor.get("L");
+        R = hardwareMap.dcMotor.get("R");
+
+        L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -87,13 +86,30 @@ public class DankAuto extends LinearOpMode {
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
+
+            L.setPower(.25);
+
+            R.setPower(-.25);
+            double run = runtime.seconds();
+            while(opModeIsActive()&&runtime.seconds()-run < 2);
+            L.setPower(0);
+            R.setPower(0);
+         run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < 2);
+        L.setPower(-.25);
+
+        R.setPower(.25);
+        run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < 3);
+
+        L.setPower(0);
+        R.setPower(0);-
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
-        }
+
     }
 }

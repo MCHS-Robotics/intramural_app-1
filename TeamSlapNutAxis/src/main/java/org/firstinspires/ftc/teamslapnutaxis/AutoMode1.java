@@ -49,7 +49,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Spins each motor starting with the FL and going clockwise.
  */
 
-@Autonomous(name = "autoSlapNut", group = "templates")
+@Autonomous(name = "autoSlapNut", group = "Slap")
 //@Disabled
 
 public class AutoMode1 extends LinearOpMode {

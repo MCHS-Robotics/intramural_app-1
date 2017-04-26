@@ -32,11 +32,11 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamdankjr;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -52,21 +52,22 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto1", group="Dank")  // @Autonomous(...) is the other common choice
+@TeleOp(name="Tele1", group="Linear Opmode")  // @Autonomous(...) is the other common choice
 //@Disabled
-public class DankAuto extends LinearOpMode {
+public class DankTele extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     DcMotor L, R;
+    double x;
+    double y;
 
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
         L = hardwareMap.dcMotor.get("L");
         R = hardwareMap.dcMotor.get("R");
-
-        L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        telemetry.addData("Status", "Initialized");
+        R.setDirection(DcMotor.Direction.REVERSE);
         telemetry.update();
 
         /* eg: Initialize the hardware variables. Note that the strings used here as parameters
@@ -86,30 +87,16 @@ public class DankAuto extends LinearOpMode {
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-
-            L.setPower(.25);
-
-            R.setPower(-.25);
-            double run = runtime.seconds();
-            while(opModeIsActive()&&runtime.seconds()-run < 2);
-            L.setPower(0);
-            R.setPower(0);
-         run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 2);
-        L.setPower(-.25);
-
-        R.setPower(.25);
-        run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 3);
-
-        L.setPower(0);
-        R.setPower(0);-
+        while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
-
+            x = gamepad1.right_stick_x;// sets x to the gamepads right stick x value
+            y = -gamepad1.left_stick_y;// sets y to the gamepads left stick y value
+            L.setPower((y + x)*.5);// x turns the motors while y handles moving forward and backward
+            R.setPower((y - x)*.5);
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
-
+        }
     }
 }

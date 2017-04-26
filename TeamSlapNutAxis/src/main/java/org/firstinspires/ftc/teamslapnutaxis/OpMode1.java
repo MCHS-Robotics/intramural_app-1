@@ -43,7 +43,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Basic template made by 11285 and their incredibly handsome programming lead
  */
 
-@TeleOp(name = "teleSlapNut", group = "templates")  // @Autonomous(...) is the other common choice
+@TeleOp(name = "teleSlapNut", group = "Slap")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class OpMode1 extends LinearOpMode {
 

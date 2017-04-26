@@ -88,20 +88,9 @@ public class AutoMode1 extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.update();
         /*Insert Code Here*/
-        L.setPower(.25);
-        R.setPower(.25);
-        double run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 2);
-        L.setPower(0);
-        R.setPower(0);
-        run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 2);
-        L.setPower(-.25);
-        R.setPower(-.25);
-        run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 3);
-        L.setPower(0);
-        R.setPower(0);
+        moveForwardWithTime(2);
+        wait(2);
+        moveBackwardWithTime(2);
         /*Insert Code Here*/
         telemetry.addData("Status", "Complete");
         telemetry.update();
@@ -172,22 +161,25 @@ public class AutoMode1 extends LinearOpMode {
         boolean isR = sensorRGB.red()>sensorRGB.blue();
         cdim.setDigitalChannelState(LED_CHANNEL, false);
         return isR;
+
     }
 
     public void moveForwardWithTime(double seconds){
         L.setPower(.25);
         R.setPower(.25);
+        //Sets Left and Right to Positive -> Move Forward
         double run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         L.setPower(0);
         R.setPower(0);
     }
 
-    public void moveBsckwardWithTime(double seconds){
+    public void moveBackwardWithTime(double seconds){
         L.setPower(-.25);
         R.setPower(-.25);
+        //Sets Left and Right to Negative -> Move Backward
         double run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         L.setPower(0);
         R.setPower(0);
     }
@@ -195,8 +187,9 @@ public class AutoMode1 extends LinearOpMode {
     public void turnLeftWithTime(double seconds){
         L.setPower(-.25);
         R.setPower(.25);
+        //Sets Left to Negative and Right to Positive -> Turn Left
         double run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         L.setPower(0);
         R.setPower(0);
     }
@@ -204,8 +197,9 @@ public class AutoMode1 extends LinearOpMode {
     public void turnRightWithTime(double seconds){
         L.setPower(.25);
         R.setPower(-.25);
+        //Sets Left to Positive and Right to Negative -> Turn Right
         double run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         L.setPower(0);
         R.setPower(0);
     }
@@ -213,6 +207,7 @@ public class AutoMode1 extends LinearOpMode {
     public void wait(double seconds){
         double run = runtime.seconds();
         while(opModeIsActive()&&runtime.seconds()-run < seconds);
+
     }
 
     public void setPower(double left,double right){

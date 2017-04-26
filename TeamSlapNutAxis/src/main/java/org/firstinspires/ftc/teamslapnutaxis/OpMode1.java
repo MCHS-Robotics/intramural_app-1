@@ -66,7 +66,9 @@ public class OpMode1 extends LinearOpMode {
         // Initialize motors & do pre game setup
         R = hardwareMap.dcMotor.get("r");
         L = hardwareMap.dcMotor.get("l");
-        L.setDirection(DcMotor.Direction.REVERSE);
+        R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        R.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -76,8 +78,8 @@ public class OpMode1 extends LinearOpMode {
             x = gamepad1.left_stick_x;
             y = -gamepad1.left_stick_y;
             x2 = gamepad1.right_stick_x;
-            R.setPower(y*speed - x2 * speed + ((gamepad1.dpad_up)?.5*speed:(gamepad1.dpad_down)?-.5*speed:(gamepad1.dpad_left)? .5:(gamepad1.dpad_right)?-.5:0));
-            L.setPower(y*speed + x2 * speed + ((gamepad1.dpad_up)?.5*speed:(gamepad1.dpad_down)?-.5*speed:(gamepad1.dpad_left)? -.5:(gamepad1.dpad_right)?.5:0));
+            R.setPower(y*speed - x2 * speed + ((gamepad1.dpad_up)?-.5*speed:(gamepad1.dpad_down)?.5*speed:(gamepad1.dpad_left)? -.5:(gamepad1.dpad_right)?.5:0));
+            L.setPower(y*speed + x2 * speed + ((gamepad1.dpad_up)?-.5*speed:(gamepad1.dpad_down)?.5*speed:(gamepad1.dpad_left)? .5:(gamepad1.dpad_right)?-.5:0));
             /*Speed*/
             if(gamepad1.left_bumper/* <- can be changed to any button*/ && modified && !modState){
                 speed*=speedModifier;

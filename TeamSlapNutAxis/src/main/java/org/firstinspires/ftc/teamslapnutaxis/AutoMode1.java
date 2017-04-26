@@ -40,6 +40,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
         import com.qualcomm.robotcore.hardware.DigitalChannelController;
+        import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -63,11 +64,12 @@ public class AutoMode1 extends LinearOpMode {
     public final double WHEELDIAMETER = 4;
     public final double CIRCLEDIAMETER = 16.75;
     public final int ENCODERCOUNT = 1120;
-
+    public ElapsedTime runtime;
     ColorSensor sensorRGB;
     static DeviceInterfaceModule cdim;
     @Override
     public void runOpMode() throws InterruptedException {
+        runtime = new ElapsedTime();
         L = hardwareMap.dcMotor.get("l");
         R = hardwareMap.dcMotor.get("r");
         L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -82,15 +84,22 @@ public class AutoMode1 extends LinearOpMode {
         telemetry.update();
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        runtime.reset();
         telemetry.addData("Status", "Running");
         telemetry.update();
         /*Insert Code Here*/
-        L.setPower(.2);
-        R.setPower(.2);
-        int i = 0;
-        while(i < 400000 && opModeIsActive()){
-            i++;
-        }
+        L.setPower(.25);
+        R.setPower(.25);
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < 2);
+        L.setPower(0);
+        R.setPower(0);
+        run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < 2);
+        L.setPower(-.25);
+        R.setPower(-.25);
+        run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < 3);
         L.setPower(0);
         R.setPower(0);
         /*Insert Code Here*/
@@ -165,4 +174,49 @@ public class AutoMode1 extends LinearOpMode {
         return isR;
     }
 
+    public void moveForwardWithTime(double seconds){
+        L.setPower(.25);
+        R.setPower(.25);
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        L.setPower(0);
+        R.setPower(0);
+    }
+
+    public void moveBsckwardWithTime(double seconds){
+        L.setPower(-.25);
+        R.setPower(-.25);
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        L.setPower(0);
+        R.setPower(0);
+    }
+
+    public void turnLeftWithTime(double seconds){
+        L.setPower(-.25);
+        R.setPower(.25);
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        L.setPower(0);
+        R.setPower(0);
+    }
+
+    public void turnRightWithTime(double seconds){
+        L.setPower(.25);
+        R.setPower(-.25);
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+        L.setPower(0);
+        R.setPower(0);
+    }
+
+    public void wait(double seconds){
+        double run = runtime.seconds();
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);
+    }
+
+    public void setPower(double left,double right){
+        L.setPower(left);
+        R.setPower(right);
+    }
 }

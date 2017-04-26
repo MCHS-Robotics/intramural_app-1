@@ -103,8 +103,8 @@ public class DankAuto extends LinearOpMode {
         while(opModeIsActive()&&runtime.seconds()-run < 3);
 
         L.setPower(0);
-        R.setPower(0);-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+        R.setPower(0);
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)

@@ -30,13 +30,13 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamdankjr;
+package org.firstinspires.ftc.robotcontroller.external.samples;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -52,20 +52,17 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto1", group="Dank")  // @Autonomous(...) is the other common choice
-//@Disabled
-public class DankAuto extends LinearOpMode {
+@TeleOp(name="Template: Linear OpMode", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@Disabled
+public class TemplateOpMode_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor L, R;
+    DcMotor leftMotor = null;
+    DcMotor rightMotor = null;
 
     @Override
     public void runOpMode() {
-        L = hardwareMap.dcMotor.get("L");
-        R = hardwareMap.dcMotor.get("R");
-
-        L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
@@ -86,30 +83,13 @@ public class DankAuto extends LinearOpMode {
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-
-            L.setPower(.25);
-
-            R.setPower(-.25);
-            double run = runtime.seconds();
-            while(opModeIsActive()&&runtime.seconds()-run < 2);
-            L.setPower(0);
-            R.setPower(0);
-         run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 2);
-        L.setPower(-.25);
-
-        R.setPower(.25);
-        run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 3);
-
-        L.setPower(0);
-        R.setPower(0);-
+        while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
 
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);
-
+        }
     }
 }

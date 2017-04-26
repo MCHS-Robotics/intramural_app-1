@@ -30,13 +30,13 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamdankjr;
+package org.firstinspires.ftc.teamfreedomfriesstrikesback;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -52,64 +52,52 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Auto1", group="Dank")  // @Autonomous(...) is the other common choice
-//@Disabled
-public class DankAuto extends LinearOpMode {
-
-    /* Declare OpMode members. */
-    private ElapsedTime runtime = new ElapsedTime();
-    DcMotor L, R;
+@TeleOp(name="FreedomFriesTemp", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+public class FreedomFriesTemp extends LinearOpMode {
+    DcMotor fLeft, fRight, bLeft, bRight, sweep, lift;
+    Servo gateOpen, tilt;
+    //double mPower;
 
     @Override
     public void runOpMode() {
-        L = hardwareMap.dcMotor.get("L");
-        R = hardwareMap.dcMotor.get("R");
-
-        L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         telemetry.addData("Status", "Initialized");
-        telemetry.update();
 
-        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
-         * to 'get' must correspond to the names assigned during the robot configuration
-         * step (using the FTC Robot Controller app on the phone).
-         */
-        // leftMotor  = hardwareMap.dcMotor.get("left_drive");
-        // rightMotor = hardwareMap.dcMotor.get("right_drive");
+        fLeft = hardwareMap.dcMotor.get("fL");
+        fRight = hardwareMap.dcMotor.get("fR");
+        bLeft = hardwareMap.dcMotor.get("bL");
+        bRight = hardwareMap.dcMotor.get("bR");
+        sweep = hardwareMap.dcMotor.get("sweep");
+        lift = hardwareMap.dcMotor.get("lift");
+        gateOpen = hardwareMap.servo.get("gate");
+        tilt = hardwareMap.servo.get("tilt");
 
-        // eg: Set the drive motor directions:
-        // "Reverse" the motor that runs backwards when connected directly to the battery
-        // leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        // rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        fRight.setDirection(DcMotor.Direction.REVERSE);
+        bRight.setDirection(DcMotor.Direction.REVERSE);
+        telemetry.addData("Status", "Initialized");
 
-        // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
+        while(opModeIsActive()){
+            forward(gamepad1.left_stick_y);
+            turn(gamepad1.right_stick_x);
 
-            L.setPower(.25);
+            /*if (gamepad1.a)
+                sweep.setPower(0.20);
+            */
+        }
+    }
 
-            R.setPower(-.25);
-            double run = runtime.seconds();
-            while(opModeIsActive()&&runtime.seconds()-run < 2);
-            L.setPower(0);
-            R.setPower(0);
-         run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 2);
-        L.setPower(-.25);
+    public void forward(double power) {
+        fLeft.setPower(power);
+        fRight.setPower(power);
+        bLeft.setPower(power);
+        bRight.setPower(power);
+    }
 
-        R.setPower(.25);
-        run = runtime.seconds();
-        while(opModeIsActive()&&runtime.seconds()-run < 3);
-
-        L.setPower(0);
-        R.setPower(0);-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.update();
-
-            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
-            // leftMotor.setPower(-gamepad1.left_stick_y);
-            // rightMotor.setPower(-gamepad1.right_stick_y);
-
+    public void turn(double power) {
+        fLeft.setPower(-power);
+        fRight.setPower(power);
+        bLeft.setPower(-power);
+        bRight.setPower(power);
     }
 }

@@ -35,6 +35,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
         import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
         import com.qualcomm.robotcore.hardware.ColorSensor;
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
@@ -59,25 +60,23 @@ public class AutoMode1 extends LinearOpMode {
 
     DcMotor L, R;
     static final int LED_CHANNEL = 5;
-    public final double WHEELDIAMETER = 0;
-    public final double CIRCLEDIAMETER = 0;
-    public final int ENCODERCOUNT = 0;
+    public final double WHEELDIAMETER = 4;
+    public final double CIRCLEDIAMETER = 16.75;
+    public final int ENCODERCOUNT = 1120;
 
     ColorSensor sensorRGB;
     static DeviceInterfaceModule cdim;
     @Override
     public void runOpMode() throws InterruptedException {
-
-
-        L = hardwareMap.dcMotor.get("fl");
-        R = hardwareMap.dcMotor.get("fr");
+        L = hardwareMap.dcMotor.get("l");
+        R = hardwareMap.dcMotor.get("r");
         L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         R.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        L.setDirection(DcMotor.Direction.REVERSE);
-        cdim = hardwareMap.deviceInterfaceModule.get("dim");
-        cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
-        sensorRGB = hardwareMap.colorSensor.get("sensor_color");
-        cdim.setDigitalChannelState(LED_CHANNEL, false);
+        R.setDirection(DcMotor.Direction.REVERSE);
+        //cdim = hardwareMap.deviceInterfaceModule.get("dim");
+        //cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
+        //sensorRGB = hardwareMap.colorSensor.get("sensor_color");
+        //cdim.setDigitalChannelState(LED_CHANNEL, false);
         idle();
         telemetry.addData("Status", "Initializing");
         telemetry.update();
@@ -86,7 +85,14 @@ public class AutoMode1 extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.update();
         /*Insert Code Here*/
-
+        L.setPower(.2);
+        R.setPower(.2);
+        int i = 0;
+        while(i < 400000 && opModeIsActive()){
+            i++;
+        }
+        L.setPower(0);
+        R.setPower(0);
         /*Insert Code Here*/
         telemetry.addData("Status", "Complete");
         telemetry.update();
@@ -99,7 +105,7 @@ public class AutoMode1 extends LinearOpMode {
         target*= ENCODERCOUNT;
         L.setPower(.3);
         R.setPower(.3);
-        while(L.getCurrentPosition() < target){}
+        while(-L.getCurrentPosition() < target && opModeIsActive()){}
         L.setPower(0);
         R.setPower(0);
         L.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -111,8 +117,8 @@ public class AutoMode1 extends LinearOpMode {
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double target = -inches/(Math.PI * WHEELDIAMETER);
         target*= ENCODERCOUNT;
-        L.setPower(-.3);
-        R.setPower(-.3);
+        L.setPower(-.05);
+        R.setPower(-.05);
         while(L.getCurrentPosition() > target){}
         L.setPower(0);
         R.setPower(0);

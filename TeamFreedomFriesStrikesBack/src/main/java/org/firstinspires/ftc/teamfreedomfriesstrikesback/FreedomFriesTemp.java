@@ -52,7 +52,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="FreedomFriesTemp", group="Linear Opmode")  // @Autonomous(...) is the other common choice
+@TeleOp(name="FreedomFriesTemp", group="TeleOp")  // @Autonomous(...) is the other common choice
 public class FreedomFriesTemp extends LinearOpMode {
     DcMotor fLeft, fRight, bLeft, bRight, sweep, lift;
     Servo gateOpen, tilt;

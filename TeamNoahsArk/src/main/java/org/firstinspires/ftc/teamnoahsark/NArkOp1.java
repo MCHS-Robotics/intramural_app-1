@@ -93,8 +93,8 @@ public class NArkOp1 extends OpMode
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
         telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
 
-        left.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
-        right.setPower(Range.clip(gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
+        left.setPower(Range.clip(-gamepad1.right_stick_x+gamepad1.left_stick_y, -1, 1));
+        right.setPower(Range.clip(gamepad1.right_stick_x+gamepad1.left_stick_y, -1, 1));
 
         if(gamepad1.right_trigger > liftThresh){    //raise lift arm
             lift.setPower(gamepad1.right_trigger);

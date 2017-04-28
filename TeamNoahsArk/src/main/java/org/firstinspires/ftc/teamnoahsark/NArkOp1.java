@@ -48,6 +48,8 @@ public class NArkOp1 extends OpMode
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left, right;
     private DcMotor lift;
+    private int lowerLiftLim;
+    private double liftThresh;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -62,6 +64,9 @@ public class NArkOp1 extends OpMode
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        lowerLiftLim = lift.getCurrentPosition();
+        liftThresh = 0.1;
     }
 
     /*
@@ -91,11 +96,14 @@ public class NArkOp1 extends OpMode
         left.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
         right.setPower(Range.clip(gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
 
-        if(gamepad1.dpad_up){
-            lift.setPower(0.35);
+        if(gamepad1.right_trigger > liftThresh){    //raise lift arm
+            lift.setPower(gamepad1.right_trigger);
         }
-        else if(gamepad1.dpad_down){
-            lift.setPower(-0.35);
+        else if(gamepad1.left_trigger > liftThresh){    //lower lift arm
+            if(lift.getCurrentPosition() > lowerLiftLim)
+                lift.setPower(-gamepad1.left_trigger);
+            else
+                lift.setPower(0);
         }
         else{
             lift.setPower(0);

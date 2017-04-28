@@ -46,7 +46,7 @@ public class NArkOp1FFSB extends OpMode
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left, right;
-    private DcMotor lift;
+    //private DcMotor lift;
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -57,7 +57,7 @@ public class NArkOp1FFSB extends OpMode
 
         left = hardwareMap.dcMotor.get("left");
         right = hardwareMap.dcMotor.get("right");
-        lift = hardwareMap.dcMotor.get("lift");
+        //lift = hardwareMap.dcMotor.get("lift");
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -85,20 +85,20 @@ public class NArkOp1FFSB extends OpMode
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
-        telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
+        //telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
 
         left.setPower(Range.clip(-gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
         right.setPower(Range.clip(gamepad1.left_stick_y+gamepad1.right_stick_x, -1, 1));
 
-        if(gamepad1.dpad_up){
-            lift.setPower(0.35);
-        }
-        else if(gamepad1.dpad_down){
-            lift.setPower(-0.35);
-        }
-        else{
-            lift.setPower(0);
-        }
+        //if(gamepad1.dpad_up){
+        //    lift.setPower(0.35);
+        //}
+        //else if(gamepad1.dpad_down){
+          //  lift.setPower(-0.35);
+        //}
+        //else{
+          //  lift.setPower(0);
+       // }
     }
 
     /*
@@ -106,7 +106,7 @@ public class NArkOp1FFSB extends OpMode
      */
     @Override
     public void stop() {
-        lift.setPower(0);
+      //  lift.setPower(0);
         left.setPower(0);
         right.setPower(0);
     }

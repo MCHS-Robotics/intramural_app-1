@@ -65,10 +65,12 @@ public class FreedomFriesTemp extends LinearOpMode{
         left = hardwareMap.dcMotor.get("fL");
         right = hardwareMap.dcMotor.get("fR");
         //sweep = hardwareMap.dcMotor.get("sweep");
-        lift = hardwareMap.dcMotor.get("lift");
-        tilt = hardwareMap.servo.get("tilt");
+        //lift = hardwareMap.dcMotor.get("lift");
+        //tilt = hardwareMap.servo.get("tilt");
 
         right.setDirection(DcMotor.Direction.REVERSE);
+        telemetry.addData("fL", left.getPower());
+        telemetry.addData("fR", right.getPower());
         telemetry.addData("Status", "Initialized");
 
         waitForStart();
@@ -95,11 +97,11 @@ public class FreedomFriesTemp extends LinearOpMode{
     }
 
     public void turn(double power){
-        left.setPower(power);
+        left.setPower(-power);
         right.setPower(power);
     }
 
-    public void lift(double power){
+    /*public void lift(double power){
         lift.setPower(power);
-    }
+    }*/
 }

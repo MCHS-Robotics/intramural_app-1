@@ -33,27 +33,27 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 /**
  * Tele Op code for SlapNutAxis that currnetly allows for movement and changeing of speed
  */
 
-@TeleOp(name = "teleSlapNut", group = "Slap")
+@TeleOp(name = "teleSlapNut4Motor", group = "Slap")
 //@Disabled
-public class OpMode1 extends LinearOpMode {
+public class OpMode4motors extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor R, L;//declares the left and right robot motors
+    DcMotor R, L,R2,L2;//declares the left and right robot motors
     double x, y, x2;//declares doubles to hold joystick values
     double forwardPower,turnPower,dPadForwardPower,dPadTurnPower;//declares doubles to hold movement power
-    double speed = .5;//Speed < 1;
-    final double speedModifier = .5;//speedModifier is what speed is multipied by to change it
+    double speed = .3;//Speed < 1;
+    final double speedModifier = .25;//speedModifier is what speed is multipied by to change it
     boolean modified = false;// allows for switching between upper and lower speeds
     boolean modState = false;// solves debouncing
 
@@ -64,9 +64,14 @@ public class OpMode1 extends LinearOpMode {
         // Initialize motors & do pre game setup
         R = hardwareMap.dcMotor.get("r");
         L = hardwareMap.dcMotor.get("l");
+        R2 = hardwareMap.dcMotor.get("R");
+        L2 = hardwareMap.dcMotor.get("L");
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        R2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        L2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         R.setDirection(DcMotor.Direction.REVERSE);
+        R2.setDirection(DcMotor.Direction.REVERSE);
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -78,21 +83,22 @@ public class OpMode1 extends LinearOpMode {
             x2 = gamepad1.right_stick_x;// gets the 1st gamepad's right thumbstick's x value
 
             forwardPower = y*speed;//get the forward move power
-            turnPower = x2*speed;//get the turn move power
+            turnPower = x2*speed/2;//get the turn move power
             if(gamepad1.dpad_up){
                 dPadForwardPower = .8 * speed;//gets dpad forward power
             }else if(gamepad1.dpad_down) {
                 dPadForwardPower = -.8 * speed;//gets dpad backward power
             }else dPadForwardPower = 0;//resets dPad Forward Power
-            if(gamepad1.dpad_left){
-                dPadTurnPower = .8 * speed;//gets dpad left turning power
+                if(gamepad1.dpad_left){
+                    dPadTurnPower = .8 * speed;//gets dpad left turning power
             }else if(gamepad1.dpad_right){
-                dPadTurnPower = -.8*speed;//gets dpad right turning power
+                    dPadTurnPower = -.8*speed;//gets dpad right turning power
             }else dPadTurnPower = 0;//resets dPad Forward Power
 
             R.setPower(forwardPower + dPadForwardPower/*<- sets the forward power of the motor*/ - turnPower - dPadTurnPower/*<- sets the turning power of the motor*/);
+            R2.setPower(R.getPower());
             L.setPower(forwardPower + dPadForwardPower/*<- sets the forward power of the motor*/ + turnPower  + dPadTurnPower/*<- sets the turning power of the motor*/);
-
+            L2.setPower(L.getPower());
             /*Speed*/
             if(gamepad1.left_bumper/* <- button to change speed*/ && modified && !modState){
                 speed*=speedModifier;// speed -> speed*speedModifier

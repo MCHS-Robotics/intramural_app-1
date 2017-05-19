@@ -33,14 +33,13 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-        import com.qualcomm.robotcore.hardware.ColorSensor;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-        import com.qualcomm.robotcore.hardware.DigitalChannelController;
-        import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -51,10 +50,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Spins each motor starting with the FL and going clockwise.
  */
 
-@Autonomous(name = "autoSlapNut", group = "Slap")
+@Autonomous(name = "colorSensorAuto", group = "Slap")
 //@Disabled
 
-public class AutoMode1 extends LinearOpMode {
+public class AutoMode2theOpeningOfColorSensor extends LinearOpMode {
 
     //private ElapsedTime runtime = new ElapsedTime();
 
@@ -80,10 +79,10 @@ public class AutoMode1 extends LinearOpMode {
         L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         R.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         R.setDirection(DcMotor.Direction.REVERSE);
-        //cdim = hardwareMap.deviceInterfaceModule.get("dim");
-        //cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
-        //sensorRGB = hardwareMap.colorSensor.get("sensor_color");
-        //cdim.setDigitalChannelState(LED_CHANNEL, false);
+        cdim = hardwareMap.deviceInterfaceModule.get("dim");
+        cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
+        sensorRGB = hardwareMap.colorSensor.get("sensor_color");
+        cdim.setDigitalChannelState(LED_CHANNEL, false);
         idle();
         telemetry.addData("Status", "Initializing");
         telemetry.update();
@@ -93,9 +92,20 @@ public class AutoMode1 extends LinearOpMode {
         telemetry.addData("Status", "Running");
         telemetry.update();
         /*Insert Code Here*/
-        moveForwardWithTime(2);
-            wait(2);
-        moveBackwardWithTime(2);
+        moveForward(49);
+        turnCounterClockwise(90);
+        moveForward(46);
+        if(isRed()){
+            turnCounterClockwise(90);
+            moveForward(20);
+            turnClockwise(90);
+        }
+        else{
+            turnClockwise(90);
+            moveForward(20);
+            turnCounterClockwise(90);
+        }
+        moveForward(24);
         /*Insert Code Here*/
         telemetry.addData("Status", "Complete");
         telemetry.update();
@@ -234,7 +244,8 @@ public class AutoMode1 extends LinearOpMode {
      * */
     public void wait(double seconds){
         double run = runtime.seconds();//sets run to current time
-        while(this.opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time(current - start)
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time(current - start)
+
     }
 
     /**

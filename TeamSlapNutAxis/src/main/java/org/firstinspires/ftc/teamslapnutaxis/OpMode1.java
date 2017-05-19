@@ -40,20 +40,18 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 /**
- * Basic template made by 11285 and their incredibly handsome programming lead
+ * Tele Op code for SlapNutAxis that currnetly allows for movement and changeing of speed
  */
 
-@TeleOp(name = "teleSlapNut", group = "Slap")  // @Autonomous(...) is the other common choice
+@TeleOp(name = "teleSlapNut", group = "Slap")
 //@Disabled
 public class OpMode1 extends LinearOpMode {
 
     /* Declare OpMode members. */
-    //time
     private ElapsedTime runtime = new ElapsedTime();
-    //movement
-    DcMotor R, L;
-    double x, y, x2;
-    //speed
+    DcMotor R, L;//declares the left and right robot motors
+    double x, y, x2;//declares doubles to hold joystick values
+    double forwardPower,turnPower,dPadForwardPower,dPadTurnPower;//declares doubles to hold movement power
     double speed = .5;//Speed < 1;
     final double speedModifier = .5;//speedModifier is what speed is multipied by to change it
     boolean modified = false;// allows for switching between upper and lower speeds
@@ -75,23 +73,38 @@ public class OpMode1 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()){
         /*Movement*/
-            x = gamepad1.left_stick_x;
-            y = -gamepad1.left_stick_y;
-            x2 = gamepad1.right_stick_x;
-            R.setPower(y*speed - x2 * speed + ((gamepad1.dpad_up)?-.5*speed:(gamepad1.dpad_down)?.5*speed:(gamepad1.dpad_left)? -.5:(gamepad1.dpad_right)?.5:0));
-            L.setPower(y*speed + x2 * speed + ((gamepad1.dpad_up)?-.5*speed:(gamepad1.dpad_down)?.5*speed:(gamepad1.dpad_left)? .5:(gamepad1.dpad_right)?-.5:0));
+            x = gamepad1.left_stick_x;// gets the 1st gamepad's left thumbstick's x value
+            y = -gamepad1.left_stick_y;// gets the 1st gamepad's left thumbstick's y value
+            x2 = gamepad1.right_stick_x;// gets the 1st gamepad's right thumbstick's x value
+
+            forwardPower = y*speed;//get the forward move power
+            turnPower = x2*speed;//get the turn move power
+            if(gamepad1.dpad_up){
+                dPadForwardPower = .5 * speed;//gets dpad forward power
+            }else if(gamepad1.dpad_down){
+                dPadForwardPower = -.5*speed;//gets dpad backward power
+            }
+            if(gamepad1.dpad_left){
+                dPadForwardPower = .5 * speed;//gets dpad left turning power
+            }else if(gamepad1.dpad_right){
+                dPadForwardPower = -.5*speed;//gets dpad right turning power
+            }
+
+            R.setPower(forwardPower + dPadForwardPower/*<- sets the forward power of the motor*/ - turnPower - dPadTurnPower/*<- sets the turning power of the motor*/);
+            L.setPower(forwardPower + dPadForwardPower/*<- sets the forward power of the motor*/ + turnPower  + dPadTurnPower/*<- sets the turning power of the motor*/);
+
             /*Speed*/
-            if(gamepad1.left_bumper/* <- can be changed to any button*/ && modified && !modState){
-                speed*=speedModifier;
+            if(gamepad1.left_bumper/* <- button to change speed*/ && modified && !modState){
+                speed*=speedModifier;// speed -> speed*speedModifier
                 modified = false;
                 modState = true;
             }
-            if(gamepad1.left_bumper/* <- can be changed to any button*/ && !modified && !modState){
-                speed*=1/speedModifier;
+            if(gamepad1.left_bumper/* <- button to change speed*/ && !modified && !modState){
+                speed*=1/speedModifier;// changes speed back to initial
                 modified = true;
                 modState = true;
             }
-            if(!gamepad1.left_bumper && modState){
+            if(!gamepad1.left_bumper && modState){//waits for button to be released
                 modState = false;
             }
 

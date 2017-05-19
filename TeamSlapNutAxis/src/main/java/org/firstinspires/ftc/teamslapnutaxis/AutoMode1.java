@@ -96,6 +96,10 @@ public class AutoMode1 extends LinearOpMode {
         telemetry.update();
     }
 
+    /**
+     * moves the robot forward for <b>inches</b> inches
+     * @param  inches  the amount of inches to move the robot forward by
+     * */
     public void moveForward(int inches){
         L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -110,6 +114,10 @@ public class AutoMode1 extends LinearOpMode {
         R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    /**
+     * moves the robot backward for <b>inches</b> inches
+     * @param  inches  the amount of inches to move the robot backward by
+     * */
     public void moveBackward(int inches){
         L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -124,7 +132,11 @@ public class AutoMode1 extends LinearOpMode {
         R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void turnLeft(double degrees){
+    /**
+     * turns the robot clockwise by <b>degrees</b> degrees
+     * @param  degrees  the amount of degrees to turn the robot clockwise
+     * */
+    public void turnClockwise(double degrees){
         L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double target = degrees * ENCODERCOUNT * CIRCLEDIAMETER/ (360 * WHEELDIAMETER);
@@ -137,7 +149,11 @@ public class AutoMode1 extends LinearOpMode {
         R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public void turnRight(double degrees){
+    /**
+     * turns the robot counter clockwise by <b>degrees</b> degrees
+     * @param  degrees  the amount of degrees to turn the robot counter clockwise
+     * */
+    public void turnCounterClockwise(double degrees){
         L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         double target = degrees * ENCODERCOUNT * CIRCLEDIAMETER/ (360 * WHEELDIAMETER);
@@ -150,6 +166,10 @@ public class AutoMode1 extends LinearOpMode {
         R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
+    /**
+     * checks to see if color detected by color sensor is more red than blue
+     * @return  boolean that is true if color is more red than blue
+     * */
     public boolean isRed(){
         //soundPlayer.play(hardwareMap.appContext,0);
         cdim.setDigitalChannelState(LED_CHANNEL, true);

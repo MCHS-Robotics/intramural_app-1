@@ -40,16 +40,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="NArkOp1", group="TeleOp")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkOp1.1", group="TeleOp")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkOp1 extends OpMode
 {
     /* Declare OpMode members. */
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor left, right;
-    private DcMotor lift;
-    private int lowerLiftLim;
-    private double liftThresh;
+    private ElapsedTime runtime = new ElapsedTime();    //How long the robot has been running
+    private DcMotor left, right;    //Declare left and right motors
+    private DcMotor lift;   //Declare lift motor
+    private int lowerLiftLim;   //Lowest position the lift arm will hold
+    private double liftThresh;  //Minimum value for triggers before lift will move
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -92,15 +92,26 @@ public class NArkOp1 extends OpMode
         telemetry.addData("Status", "Running: " + runtime.toString());
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
         telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
+        telemetry.addData("Lift Position:", "%d encoder units", lift.getCurrentPosition());
 
+        /**
+         * Set motor power according to joystick readings
+         * Left joystick Y-axis controls forward/backward
+         * Right joystick X-axis controls rotation
+         */
         left.setPower(Range.clip(-gamepad1.right_stick_x+gamepad1.left_stick_y, -1, 1));
         right.setPower(Range.clip(gamepad1.right_stick_x+gamepad1.left_stick_y, -1, 1));
 
+        /**
+         * Set lift motor power according to gamepad trigger values
+         * Right trigger raises lift arm
+         * Left trigger lowers lift arm
+         */
         if(gamepad1.right_trigger > liftThresh){    //raise lift arm
             lift.setPower(gamepad1.right_trigger);
         }
         else if(gamepad1.left_trigger > liftThresh){    //lower lift arm
-            if(lift.getCurrentPosition() > lowerLiftLim)
+            if(lift.getCurrentPosition() > lowerLiftLim)    //prevent lift from going underneath a certain position
                 lift.setPower(-gamepad1.left_trigger);
             else
                 lift.setPower(0);

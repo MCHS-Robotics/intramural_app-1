@@ -39,8 +39,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="NArkAuto1", group="Autonomous")  // @Autonomous(...) is the other common choice
-@Disabled
+@TeleOp(name="NArkAuto1.2", group="Autonomous")  // @Autonomous(...) is the other common choice
+//@Disabled
 public class NArkAuto1 extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -60,6 +60,9 @@ public class NArkAuto1 extends LinearOpMode {
          left.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
          right.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
 
+//        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -67,13 +70,21 @@ public class NArkAuto1 extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("Drive Position:", "L: %d   R: %d", left.getCurrentPosition(), right.getCurrentPosition());
             telemetry.update();
 
             mTimer.reset();
 
+            //fwd(1000, 0.25);
+            //bck(1000, 0.40);
+
             while(runtime.milliseconds() < 4500){
-                setMotorPower(0.35);
+                setMotorPower(0.3);
             }
+            while(runtime.milliseconds() >=4500 && runtime.milliseconds() < 6000){
+                setMotorPower(-0.35);
+            }
+
             setMotorPower(0);
 
 
@@ -87,4 +98,51 @@ public class NArkAuto1 extends LinearOpMode {
         right.setPower(n);
     }
 
+    /**
+     * lol i forgot we dont have encoders so forget all this stuff here :P
+     */
+    /*private void fwd(int enc, double pwr){
+        int lTarg = left.getCurrentPosition() + enc;
+        int rTarg = right.getCurrentPosition() + enc;
+
+        left.setTargetPosition(lTarg);
+        right.setTargetPosition(rTarg);
+
+        left.setPower(pwr);
+        right.setPower(pwr);
+    }
+
+    private void bck(int enc, double pwr){
+        int lTarg = left.getCurrentPosition() - enc;
+        int rTarg = right.getCurrentPosition() - enc;
+
+        left.setTargetPosition(lTarg);
+        right.setTargetPosition(rTarg);
+
+        left.setPower(pwr);
+        right.setPower(pwr);
+    }
+
+    private void turnL(int enc, double pwr){
+        int lTarg = left.getCurrentPosition() - enc;
+        int rTarg = right.getCurrentPosition() + enc;
+
+        left.setTargetPosition(lTarg);
+        right.setTargetPosition(rTarg);
+
+        left.setPower(pwr);
+        right.setPower(pwr);
+    }
+
+    private void turnR(int enc, double pwr){
+        int lTarg = left.getCurrentPosition() + enc;
+        int rTarg = right.getCurrentPosition() - enc;
+
+        left.setTargetPosition(lTarg);
+        right.setTargetPosition(rTarg);
+
+        left.setPower(pwr);
+        right.setPower(pwr);
+    }
+*/
 }

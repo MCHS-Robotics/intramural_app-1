@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="NArkOp1.1", group="TeleOp")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkOp1.2", group="TeleOp")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkOp1 extends OpMode
 {
@@ -66,7 +66,7 @@ public class NArkOp1 extends OpMode
         left.setDirection(DcMotorSimple.Direction.FORWARD);
 
         lowerLiftLim = lift.getCurrentPosition();
-        liftThresh = 0.1;
+        liftThresh = 0.075;
     }
 
     /*
@@ -108,11 +108,11 @@ public class NArkOp1 extends OpMode
          * Left trigger lowers lift arm
          */
         if(gamepad1.right_trigger > liftThresh){    //raise lift arm
-            lift.setPower(gamepad1.right_trigger);
+            lift.setPower(gamepad1.right_trigger);  //encoder units decrease
         }
         else if(gamepad1.left_trigger > liftThresh){    //lower lift arm
-            if(lift.getCurrentPosition() > lowerLiftLim)    //prevent lift from going underneath a certain position
-                lift.setPower(-gamepad1.left_trigger);
+            if(lift.getCurrentPosition() < lowerLiftLim)    //prevent lift from going underneath a certain position
+                lift.setPower(-gamepad1.left_trigger);  //encoder units increase
             else
                 lift.setPower(0);
         }

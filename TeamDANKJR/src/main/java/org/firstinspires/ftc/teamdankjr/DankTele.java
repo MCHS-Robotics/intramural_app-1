@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -58,18 +59,24 @@ public class DankTele extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
-    DcMotor L, R;
+    DcMotor L, R, C;
     double x;
     double y;
+    Servo Claw;
+    boolean clawState;
+float ClawPos;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         L = hardwareMap.dcMotor.get("L");
         R = hardwareMap.dcMotor.get("R");
+        C=  hardwareMap.dcMotor.get("C");
+        Claw = hardwareMap.servo.get("Claw");
         R.setDirection(DcMotor.Direction.REVERSE);
         telemetry.update();
-
+        clawState = false;
+        ClawPos = 0f;
         /* eg: Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone).
@@ -94,6 +101,34 @@ public class DankTele extends LinearOpMode {
             y = -gamepad1.left_stick_y;// sets y to the gamepads left stick y value
             L.setPower((y + x)*.5);// x turns the motors while y handles moving forward and backward
             R.setPower((y - x)*.5);
+            if(gamepad1.right_trigger > .3){
+                C.setPower(.2);
+            }
+            else if(gamepad1.left_trigger >.3){
+                C.setPower(-.2);
+            }
+            else C.setPower(0);
+            if(gamepad1.a && !clawState){
+                clawState = true;
+                if(Claw.getPosition() == 0){
+                    Claw.setPosition(.5);
+                }else{
+                    Claw.setPosition(0);
+
+                }
+            }
+            if(!gamepad1.a && clawState){
+                clawState = false;
+            }
+            if(gamepad1.dpad_up){
+                ClawPos += .0001f;
+            }
+            if(gamepad1.dpad_down){
+                ClawPos -= .0001f;
+            }
+            Claw.setPosition(ClawPos);
+            telemetry.addData("Claw" , "ClawPos: " + ClawPos);
+            telemetry.update();
             // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
             // leftMotor.setPower(-gamepad1.left_stick_y);
             // rightMotor.setPower(-gamepad1.right_stick_y);

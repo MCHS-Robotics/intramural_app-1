@@ -99,7 +99,7 @@ public class NArkOp1 extends OpMode
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
         telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
         telemetry.addData("Lift Position:", "%d encoder units", lift.getCurrentPosition());
-        telemetry.addData("Collector Power:", "%d", coll.getPower());
+        telemetry.addData("Collector Power:", "%f", coll.getPower());
 
         /**
          * Set motor power according to joystick readings
@@ -129,8 +129,8 @@ public class NArkOp1 extends OpMode
 
         /**
          * Run the collection mechanism on the bucket
-         * D-Pad up runs collecting
-         * D-Pad down runs ejecting
+         * D-Pad up runs ejecting
+         * D-Pad down runs collecting
          */
         if(gamepad1.dpad_up)
             coll.setPower(collNeutral + 0.5);

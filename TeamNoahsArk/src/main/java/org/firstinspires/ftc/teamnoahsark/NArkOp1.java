@@ -42,7 +42,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="NArkOp1.4.1", group="TeleOp")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkOp1.5", group="TeleOp")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkOp1 extends OpMode
 {
@@ -119,7 +119,8 @@ public class NArkOp1 extends OpMode
         }
         else if(gamepad1.left_trigger > liftThresh){    //lower lift arm
             if(lift.getCurrentPosition() < lowerLiftLim)    //prevent lift from going underneath a certain position
-                lift.setPower(-gamepad1.left_trigger);  //encoder units increase
+                lift.setPower(-Range.scale(gamepad1.left_trigger, 0.0, 1.0, 0.0, 0.65));  //encoder units increase
+
             else
                 lift.setPower(0);
         }

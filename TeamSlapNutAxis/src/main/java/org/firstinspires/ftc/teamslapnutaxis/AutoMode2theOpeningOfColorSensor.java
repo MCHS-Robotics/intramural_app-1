@@ -33,14 +33,13 @@ TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-        import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-        import com.qualcomm.robotcore.hardware.ColorSensor;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
-        import com.qualcomm.robotcore.hardware.DigitalChannelController;
-        import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DeviceInterfaceModule;
+import com.qualcomm.robotcore.hardware.DigitalChannelController;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 //import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //import com.qualcomm.robotcore.hardware.GyroSensor;
@@ -51,10 +50,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Spins each motor starting with the FL and going clockwise.
  */
 
-@Autonomous(name = "autoSlapNut", group = "Slap")
+@Autonomous(name = "colorSensorAuto", group = "Slap")
 //@Disabled
 
-public class AutoMode1 extends LinearOpMode {
+public class AutoMode2theOpeningOfColorSensor extends LinearOpMode {
 
     //private ElapsedTime runtime = new ElapsedTime();
 
@@ -66,7 +65,6 @@ public class AutoMode1 extends LinearOpMode {
     public final double CIRCLEDIAMETER = 16.75;
     public final int ENCODERCOUNT = 1120;
     public ElapsedTime runtime;
-    public float speed = .3f;
     ColorSensor sensorRGB;
     static DeviceInterfaceModule cdim;
     @Override
@@ -81,37 +79,33 @@ public class AutoMode1 extends LinearOpMode {
         L.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         R.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         R.setDirection(DcMotor.Direction.REVERSE);
-        //cdim = hardwareMap.deviceInterfaceModule.get("dim");
-        //cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
-        //sensorRGB = hardwareMap.colorSensor.get("sensor_color");
-        //cdim.setDigitalChannelState(LED_CHANNEL, false);
+        cdim = hardwareMap.deviceInterfaceModule.get("dim");
+        cdim.setDigitalChannelMode(LED_CHANNEL, DigitalChannelController.Mode.OUTPUT);
+        sensorRGB = hardwareMap.colorSensor.get("sensor_color");
+        cdim.setDigitalChannelState(LED_CHANNEL, false);
         idle();
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-        int sleeper = 100;
-        while(!gamepad1.a && !opModeIsActive()){
-            if(gamepad1.left_stick_y < -.5){
-                speed+=.01f;
-            }
-            else if(gamepad1.left_stick_y > .5){
-                speed-=.01f;
-            }
-            telemetry.addData("Status","Speed:" + speed);
-            telemetry.addData("Status","Y val" + gamepad1.left_stick_y);
-            telemetry.update();
-            sleep(sleeper);
-        }
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();//resets the timer so the autonomous runs with the timer at 0
         telemetry.addData("Status", "Running");
         telemetry.update();
         /*Insert Code Here*/
-        //leftOffset(.1f);
-        moveForwardWithTime(3);
-        //leftOffset(0);
-        sleep(2000);
-        moveBackwardWithTime(3);
+        moveForward(49);
+        turnCounterClockwise(90);
+        moveForward(46);
+        if(isRed()){
+            turnCounterClockwise(90);
+            moveForward(20);
+            turnClockwise(90);
+        }
+        else{
+            turnClockwise(90);
+            moveForward(20);
+            turnCounterClockwise(90);
+        }
+        moveForward(24);
         /*Insert Code Here*/
         telemetry.addData("Status", "Complete");
         telemetry.update();
@@ -202,24 +196,10 @@ public class AutoMode1 extends LinearOpMode {
      * @param  seconds  the amount of seconds to move the robot for
      * */
     public void moveForwardWithTime(double seconds){
-        L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setPower(speed,speed);//Sets Left and Right to Positive -> Move Forward
+        setPower(.25,.25);//Sets Left and Right to Positive -> Move Forward
         double run = runtime.seconds();//sets run to current time
-        while(opModeIsActive()&&runtime.seconds()-run < seconds) {//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
-            if(L.getCurrentPosition() > R.getCurrentPosition()){
-                R.setPower(R.getPower()+.00001);
-            }
-            else if(R.getCurrentPosition() > L.getCurrentPosition()){
-                R.setPower(R.getPower()- .00001);
-            }
-            telemetry.addData("Encoder", "Motor L" + L.getCurrentPosition());
-            telemetry.addData("Encoder", "Motor R" + R.getCurrentPosition());
-            telemetry.update();
-        }
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         setPower(0,0);//stops robot
-        L.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -227,19 +207,11 @@ public class AutoMode1 extends LinearOpMode {
      * @param  seconds  the amount of seconds to move the robot for
      * */
     public void moveBackwardWithTime(double seconds){
-        L.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        R.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        setPower(-speed,-speed);//moves robot backwards
+        setPower(-.25,-.25);//moves robot backwards
         //Sets Left and Right to Negative -> Move Backward
         double run = runtime.seconds();//sets run to current time
-        while(opModeIsActive()&&runtime.seconds()-run < seconds){//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
-            telemetry.addData("Encoder", "Motor L" + L.getCurrentPosition());
-            telemetry.addData("Encoder", "Motor R" + R.getCurrentPosition());
-            telemetry.update();
-        }
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time = seconds -> For seconds you want, motor moves forward for this amount of seconds
         setPower(0,0);//stops robot
-        L.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        R.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     /**
@@ -272,35 +244,17 @@ public class AutoMode1 extends LinearOpMode {
      * */
     public void wait(double seconds){
         double run = runtime.seconds();//sets run to current time
-        while(this.opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time(current - start)
-    }
+        while(opModeIsActive()&&runtime.seconds()-run < seconds);//Checks elapsed time(current - start)
 
-    public float lOffset = 0;// L's power = power + lOffset
-    public float rOffset = 0;// R's power = power + rOffset
-
-    /**
-     * changes the offset of the left motor (power of L = L + offset)
-     * @param change offset that motor L will have
-     */
-    public void leftOffset(float change){
-       lOffset = change;
     }
 
     /**
-     * changes the offset of the right motor (power of R = R + offset)
-     * @param change offset that motor R will have
-     */
-    public void rightOffset(float change){
-        rOffset = change;
-    }
-
-    /**
-     * sets the left motor to <b>left</b> power + lOffset and the right motor to <b>right</b> power + rOffset
+     * sets the left motor to <b>left</b> power and the right motor to <b>right</b> power
      * @param  left  the power to set the left motor to
      * @param  right  the power to set the right motor to
      * */
     public void setPower(double left,double right){
-        L.setPower(left+lOffset);//sets L's power to left
-        R.setPower(right+rOffset);//sets R's power to right
+        L.setPower(left);//sets L's power to left
+        R.setPower(right);//sets R's power to right
     }
 }

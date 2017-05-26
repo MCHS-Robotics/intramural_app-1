@@ -35,21 +35,25 @@ package org.firstinspires.ftc.teamnoahsark;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="NArkOp1.1", group="TeleOp")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkOp1.5", group="TeleOp")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkOp1 extends OpMode
 {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();    //How long the robot has been running
-    private DcMotor left, right;    //Declare left and right motors
-    private DcMotor lift;   //Declare lift motor
+    private DcMotor left, right;//Declare left and right motors
+    private DcMotor lift;       //Declare lift motor
     private int lowerLiftLim;   //Lowest position the lift arm will hold
     private double liftThresh;  //Minimum value for triggers before lift will move
+    private CRServo coll;         //Declare collection servo
+    private double collNeutral; //position value where CR servo 'coll' is not moving
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -61,12 +65,14 @@ public class NArkOp1 extends OpMode
         left = hardwareMap.dcMotor.get("left");
         right = hardwareMap.dcMotor.get("right");
         lift = hardwareMap.dcMotor.get("lift");
+        coll = hardwareMap.crservo.get("collect");
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setDirection(DcMotorSimple.Direction.FORWARD);
 
         lowerLiftLim = lift.getCurrentPosition();
-        liftThresh = 0.1;
+        liftThresh = 0.075;
+        collNeutral = 0.0;
     }
 
     /*
@@ -93,6 +99,7 @@ public class NArkOp1 extends OpMode
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
         telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
         telemetry.addData("Lift Position:", "%d encoder units", lift.getCurrentPosition());
+        telemetry.addData("Collector Power:", "%f", coll.getPower());
 
         /**
          * Set motor power according to joystick readings
@@ -108,17 +115,30 @@ public class NArkOp1 extends OpMode
          * Left trigger lowers lift arm
          */
         if(gamepad1.right_trigger > liftThresh){    //raise lift arm
-            lift.setPower(gamepad1.right_trigger);
+            lift.setPower(gamepad1.right_trigger);  //encoder units decrease
         }
         else if(gamepad1.left_trigger > liftThresh){    //lower lift arm
-            if(lift.getCurrentPosition() > lowerLiftLim)    //prevent lift from going underneath a certain position
-                lift.setPower(-gamepad1.left_trigger);
+            if(lift.getCurrentPosition() < lowerLiftLim)    //prevent lift from going underneath a certain position
+                lift.setPower(-Range.scale(gamepad1.left_trigger, 0.0, 1.0, 0.0, 0.65));  //encoder units increase
+
             else
                 lift.setPower(0);
         }
         else{
             lift.setPower(0);
         }
+
+        /**
+         * Run the collection mechanism on the bucket
+         * D-Pad up runs ejecting
+         * D-Pad down runs collecting
+         */
+        if(gamepad1.dpad_up)
+            coll.setPower(collNeutral + 0.5);
+        else if(gamepad1.dpad_down)
+            coll.setPower(collNeutral - 0.5);
+        else
+            coll.setPower(collNeutral);
     }
 
     /*

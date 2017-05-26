@@ -35,13 +35,14 @@ package org.firstinspires.ftc.teamnoahsark;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="NArkOp1.4", group="TeleOp")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkOp1.4.1", group="TeleOp")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkOp1 extends OpMode
 {
@@ -51,7 +52,7 @@ public class NArkOp1 extends OpMode
     private DcMotor lift;       //Declare lift motor
     private int lowerLiftLim;   //Lowest position the lift arm will hold
     private double liftThresh;  //Minimum value for triggers before lift will move
-    private Servo coll;         //Declare collection servo
+    private CRServo coll;         //Declare collection servo
     private double collNeutral; //position value where CR servo 'coll' is not moving
 
     /*
@@ -64,14 +65,14 @@ public class NArkOp1 extends OpMode
         left = hardwareMap.dcMotor.get("left");
         right = hardwareMap.dcMotor.get("right");
         lift = hardwareMap.dcMotor.get("lift");
-        coll = hardwareMap.servo.get("collect");
+        coll = hardwareMap.crservo.get("collect");
 
         right.setDirection(DcMotorSimple.Direction.REVERSE);
         left.setDirection(DcMotorSimple.Direction.FORWARD);
 
         lowerLiftLim = lift.getCurrentPosition();
         liftThresh = 0.075;
-        collNeutral = coll.getPosition();
+        collNeutral = 0.0;
     }
 
     /*
@@ -98,7 +99,7 @@ public class NArkOp1 extends OpMode
         telemetry.addData("Motor Power:", "Left: %f  Right %f", left.getPower(), right.getPower());
         telemetry.addData("Lift Power:", "Lift: " + lift.getPower());
         telemetry.addData("Lift Position:", "%d encoder units", lift.getCurrentPosition());
-        telemetry.addData("Collector Power:", "%d", coll.getPosition());
+        telemetry.addData("Collector Power:", "%d", coll.getPower());
 
         /**
          * Set motor power according to joystick readings
@@ -132,11 +133,11 @@ public class NArkOp1 extends OpMode
          * D-Pad down runs ejecting
          */
         if(gamepad1.dpad_up)
-            coll.setPosition(collNeutral + 0.5);
+            coll.setPower(collNeutral + 0.5);
         else if(gamepad1.dpad_down)
-            coll.setPosition(collNeutral - 0.5);
+            coll.setPower(collNeutral - 0.5);
         else
-            coll.setPosition(collNeutral);
+            coll.setPower(collNeutral);
     }
 
     /*

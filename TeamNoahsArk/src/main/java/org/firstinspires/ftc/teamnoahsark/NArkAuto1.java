@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="NArkAuto1.2", group="Autonomous")  // @Autonomous(...) is the other common choice
+@TeleOp(name="NArkAuto1.3", group="Autonomous")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkAuto1 extends LinearOpMode {
 
@@ -57,8 +57,8 @@ public class NArkAuto1 extends LinearOpMode {
          left  = hardwareMap.dcMotor.get("left");
          right = hardwareMap.dcMotor.get("right");
 
-         left.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-         right.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+         left.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+         right.setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
 
 //        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 //        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);

@@ -56,10 +56,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class FreedomFriesTemp extends LinearOpMode{
     DcMotor left, right, lift; /*sweep*/;
     Servo tilt;
+    double leftPow, rightPow;
     //double mPower;
-
+    double x, y;
     @Override
-    public void runOpMode(){
+    public void runOpMode() {
         telemetry.addData("Status", "Initialized");
 
         left = hardwareMap.dcMotor.get("fL");
@@ -69,39 +70,27 @@ public class FreedomFriesTemp extends LinearOpMode{
         //tilt = hardwareMap.servo.get("tilt");
 
         right.setDirection(DcMotor.Direction.REVERSE);
-        telemetry.addData("fL", left.getPower());
-        telemetry.addData("fR", right.getPower());
-        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
         waitForStart();
 
-        while(opModeIsActive()){
-            forward(gamepad1.left_stick_y);
-            turn(gamepad1.right_stick_x);
-
+        while (opModeIsActive()){
+            y = -gamepad1.left_stick_y;
+            x = gamepad1.right_stick_x;
+            leftPow = y/2 + x/3;
+            rightPow = y/2 - x/3;
+            left.setPower(leftPow);
+            right.setPower(rightPow);
             /*if(gamepad1.a)
                 sweep.setPower(0.20);
-            */
-            /*if(gamepad2.a){
+
+            if(gamepad2.a){
                 lift(-0.20);
             }
             if(gamepad2.b){
                 lift(0.20);
             }*/
+            idle();
         }
     }
-
-    public void forward(double power){
-        left.setPower(power);
-        right.setPower(power);
-    }
-
-    public void turn(double power){
-        left.setPower(-power);
-        right.setPower(power);
-    }
-
-    /*public void lift(double power){
-        lift.setPower(power);
-    }*/
 }

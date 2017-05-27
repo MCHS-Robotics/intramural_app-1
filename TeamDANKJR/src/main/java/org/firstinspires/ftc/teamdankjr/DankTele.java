@@ -121,10 +121,10 @@ float ClawPos;
                 clawState = false;
             }
             if(gamepad1.dpad_up){
-                ClawPos += .0004f;
+                ClawPos += .005f;
             }
             if(gamepad1.dpad_down){
-                ClawPos -= .0004f;
+                ClawPos -= .005f;
             }
             Claw.setPosition(ClawPos);
             telemetry.addData("Claw" , "ClawPos: " + ClawPos);

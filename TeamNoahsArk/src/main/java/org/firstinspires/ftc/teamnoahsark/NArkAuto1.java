@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name="NArkAuto1.3.1", group="Autonomous")  // @Autonomous(...) is the other common choice
+@Autonomous(name="NArkAuto1.3.2", group="Autonomous")  // @Autonomous(...) is the other common choice
 //@Disabled
 public class NArkAuto1 extends LinearOpMode {
 
@@ -79,12 +79,12 @@ public class NArkAuto1 extends LinearOpMode {
             //fwd(1000, 0.25);
             //bck(1000, 0.40);
 
-            while(runtime.milliseconds() < 2500){
+            while(runtime.milliseconds() < 2800){
                 setMotorPower(0.3);
             }
             setMotorPower(0);
 
-            while(runtime.milliseconds() >= 2500 && runtime.milliseconds() < 5250){
+            while(runtime.milliseconds() >= 2800 && runtime.milliseconds() < 5700){
                 setMotorPower(-0.35);
             }
             setMotorPower(0);

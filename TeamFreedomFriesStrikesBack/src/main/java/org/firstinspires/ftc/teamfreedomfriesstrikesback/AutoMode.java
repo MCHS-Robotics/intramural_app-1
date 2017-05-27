@@ -85,13 +85,13 @@ public class AutoMode extends LinearOpMode {
         L.setPower(.2);
         R.setPower(.2);
         double time = runtime.seconds();
-        while(opModeIsActive() && runtime.seconds()-time > 3);
+        while(opModeIsActive() && runtime.seconds()-time < 5);
         L.setPower(0);
         R.setPower(0);
-        while(opModeIsActive() && runtime.seconds()-time > 1);
+        while(opModeIsActive() && runtime.seconds()-time < 10);
         L.setPower(-.2);
         R.setPower(-.2);
-        while(opModeIsActive() && runtime.seconds()-time > 3.5);
+        while(opModeIsActive() && runtime.seconds()-time < 15);
         L.setPower(0);
         R.setPower(0);
         /*Insert Code Here*/
@@ -100,6 +100,4 @@ public class AutoMode extends LinearOpMode {
 
 
     }
-
-
 }

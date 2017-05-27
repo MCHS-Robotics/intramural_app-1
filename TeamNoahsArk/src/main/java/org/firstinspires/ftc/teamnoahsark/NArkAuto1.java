@@ -78,13 +78,14 @@ public class NArkAuto1 extends LinearOpMode {
             //fwd(1000, 0.25);
             //bck(1000, 0.40);
 
-            while(runtime.milliseconds() < 4500){
+            while(runtime.milliseconds() < 2500){
                 setMotorPower(0.3);
             }
-            while(runtime.milliseconds() >=4500 && runtime.milliseconds() < 6000){
+            setMotorPower(0);
+
+            while(runtime.milliseconds() >= 2500 && runtime.milliseconds() < 5250){
                 setMotorPower(-0.35);
             }
-
             setMotorPower(0);
 
 

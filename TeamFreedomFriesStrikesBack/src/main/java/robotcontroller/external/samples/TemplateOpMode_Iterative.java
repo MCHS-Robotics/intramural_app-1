@@ -30,7 +30,7 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-package org.firstinspires.ftc.teamdankjr;
+package robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -53,7 +53,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-public class Autonomous1 extends OpMode
+@Disabled
+public class TemplateOpMode_Iterative extends OpMode
 {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -113,19 +114,6 @@ public class Autonomous1 extends OpMode
      */
     @Override
     public void stop() {
-    }
-
-    public void forward(int forward) {
-        //public static void main(String[]args)
-        int num = Integer.parseInt(JOptionPane.showInputDialog("Enter a number"));
-        final int num1 = 2;
-        num2 = num - num1;
-        if (num > num1)
-            System.out.println(num + " is " + num2 + " more than " + num1);
-        else if (num1 > num)
-            System.out.println(num + " is " + (num2 * -1) + " less than " + num1);
-        else
-            System.out.println(num + " is equal to " + num1);
     }
 
 }

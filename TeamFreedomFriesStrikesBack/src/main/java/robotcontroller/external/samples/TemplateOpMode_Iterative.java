@@ -29,10 +29,8 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*//*
-
-
-package org.firstinspires.ftc.teamdankjr;
+*/
+package robotcontroller.external.samples;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -40,7 +38,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-*/
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
@@ -53,34 +50,28 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- *//*
-
+ */
 
 @TeleOp(name="Template: Iterative OpMode", group="Iterative Opmode")  // @Autonomous(...) is the other common choice
-public class Autonomous1 extends OpMode
+@Disabled
+public class TemplateOpMode_Iterative extends OpMode
 {
-    */
-/* Declare OpMode members. *//*
-
+    /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftMotor = null;
     private DcMotor rightMotor = null;
 
-    */
-/*
+    /*
      * Code to run ONCE when the driver hits INIT
-     *//*
-
+     */
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        */
-/* eg: Initialize the hardware variables. Note that the strings used here as parameters
+        /* eg: Initialize the hardware variables. Note that the strings used here as parameters
          * to 'get' must correspond to the names assigned during the robot configuration
          * step (using the FTC Robot Controller app on the phone).
-         *//*
-
+         */
         // leftMotor  = hardwareMap.dcMotor.get("left_drive");
         // rightMotor = hardwareMap.dcMotor.get("right_drive");
 
@@ -91,30 +82,24 @@ public class Autonomous1 extends OpMode
         // telemetry.addData("Status", "Initialized");
     }
 
-    */
-/*
+    /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     *//*
-
+     */
     @Override
     public void init_loop() {
     }
 
-    */
-/*
+    /*
      * Code to run ONCE when the driver hits PLAY
-     *//*
-
+     */
     @Override
     public void start() {
         runtime.reset();
     }
 
-    */
-/*
+    /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     *//*
-
+     */
     @Override
     public void loop() {
         telemetry.addData("Status", "Running: " + runtime.toString());
@@ -124,27 +109,11 @@ public class Autonomous1 extends OpMode
         // rightMotor.setPower(-gamepad1.right_stick_y);
     }
 
-    */
-/*
+    /*
      * Code to run ONCE after the driver hits STOP
-     *//*
-
+     */
     @Override
     public void stop() {
     }
 
-    public void forward(int forward) {
-        //public static void main(String[]args)
-        int num = Integer.parseInt(JOptionPane.showInputDialog("Enter a number"));
-        final int num1 = 2;
-        num2 = num - num1;
-        if (num > num1)
-            System.out.println(num + " is " + num2 + " more than " + num1);
-        else if (num1 > num)
-            System.out.println(num + " is " + (num2 * -1) + " less than " + num1);
-        else
-            System.out.println(num + " is equal to " + num1);
-    }
-
 }
-*/

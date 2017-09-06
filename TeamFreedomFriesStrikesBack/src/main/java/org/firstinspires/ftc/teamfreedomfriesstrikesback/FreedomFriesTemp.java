@@ -54,8 +54,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="FreedomFriesTemp", group="TeleOp")  // @Autonomous(...) is the other common choice
 public class FreedomFriesTemp extends LinearOpMode{
-    DcMotor left, right, lift; /*sweep*/;
-    Servo tilt;
+    DcMotor left, right;// lift; /*sweep*/;
+   // Servo tilt;
     //double mPower;
 
     @Override
